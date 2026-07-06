@@ -133,7 +133,7 @@ make init-brain
 
 ## 6. Configuration
 
-Redosier is configured using a unified topology file.
+Invalru is configured using a unified topology file.
 
 ```yaml
 engine:
@@ -189,4 +189,3 @@ You can interact with the running orchestration loop using the native CLI client
 
 Distributed under the Apache License 2.0. See `LICENSE` for details.
 
-```
