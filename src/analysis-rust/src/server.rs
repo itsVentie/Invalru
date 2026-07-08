@@ -9,6 +9,7 @@ pub mod pb {
 
 use pb::analysis_service_server::{AnalysisService, AnalysisServiceServer};
 use pb::{NetworkEvent, AnalysisResponse};
+use crate::ast::SecurityAnalyzer;
 
 #[derive(Debug, Default)]
 pub struct MyAnalysisServer {}
@@ -20,10 +21,17 @@ impl AnalysisService for MyAnalysisServer {
         request: Request<NetworkEvent>,
     ) -> Result<Response<AnalysisResponse>, Status> {
         let event = request.into_inner();
+        let mut is_valid = true;
+        
+        if !event.raw_body.is_empty() {
+            if let Some(ast_tree) = SecurityAnalyzer::parse_json(&event.raw_body) {
+                is_valid = SecurityAnalyzer::inspect_node(&ast_tree);
+            }
+        }
         
         let reply = AnalysisResponse {
             session_id: format!("sess_{}", event.timestamp),
-            status: true,
+            status: is_valid,
         };
 
         Ok(Response::new(reply))
