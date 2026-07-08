@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package analysis;
 
+option go_package = "ingestion-go/pkg/pb;pb";
+
 message NetworkEvent {
   int64 timestamp = 1;
   string source_ip = 2;
