@@ -65,4 +65,24 @@ impl SecurityAnalyzer {
             _ => true,
         }
     }
+
+    pub fn inspect_url(url: &str) -> bool {
+        let url_lower = url.to_lowercase();
+
+        let traversal_patterns = ["../", "..\\", "..%2f", "%2e%2e%2f", "/etc/passwd", "win.ini", "boot.ini"];
+        for pattern in traversal_patterns {
+            if url_lower.contains(pattern) {
+                return false;
+            }
+        }
+
+        let xss_patterns = ["<script", "javascript:", "onerror=", "onload=", "<img", "alert("];
+        for pattern in xss_patterns {
+            if url_lower.contains(pattern) {
+                return false;
+            }
+        }
+
+        true
+    }
 }

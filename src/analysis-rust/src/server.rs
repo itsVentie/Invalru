@@ -22,8 +22,12 @@ impl AnalysisService for MyAnalysisServer {
     ) -> Result<Response<AnalysisResponse>, Status> {
         let event = request.into_inner();
         let mut is_valid = true;
-        
-        if !event.raw_body.is_empty() {
+
+        if !SecurityAnalyzer::inspect_url(&event.url) {
+            is_valid = false;
+        }
+
+        if is_valid && !event.raw_body.is_empty() {
             if let Some(ast_tree) = SecurityAnalyzer::parse_json(&event.raw_body) {
                 is_valid = SecurityAnalyzer::inspect_node(&ast_tree);
             }

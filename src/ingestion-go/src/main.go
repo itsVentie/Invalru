@@ -18,7 +18,7 @@ func main() {
 	fmt.Printf("Ingestion service started. Sending mock events to %s...\n", targetAddr)
 
 	for {
-		resp, err := client.SendNetworkEvent("POST", "/api/v1/login", []byte(`{"user":"admin"}`))
+		resp, err := client.SendNetworkEvent("GET", "/api/v1/debug?file=../../etc/passwd", []byte(`{"status":"ok"}`))
 		if err != nil {
 			log.Printf("Error sending event: %v", err)
 		} else {
